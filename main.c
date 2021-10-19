@@ -3,6 +3,8 @@
  * 
  * Nome: Calvin Suzuki de Camargo 
  * Número USP: 11232420 
+ * Nome: Guilherme Barros Villela
+ * Número USP: 12549936
  */
 
 #include "Catalogo/catalogo.h"
