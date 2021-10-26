@@ -14,8 +14,8 @@
 
 typedef struct catalogo_t CATALOGO;
 
-CATALOGO *make_catalogo();
-CATALOGO *adicionar_ao_catalogo(CATALOGO *catalogo);
+CATALOGO *catalogo_create();
+bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo );
 void search(CATALOGO *catalogo);
 void search_empresa(char *lista, CATALOGO *catalogo);
 void search_ano(char *lista, CATALOGO *catalogo);

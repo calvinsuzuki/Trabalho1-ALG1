@@ -6,69 +6,107 @@
  * Nome: Guilherme Barros Villela
  * Número USP: 12549936
  */
+
 #include "catalogo.h"
 #include <string.h> 
 #include <stdio.h>
 #include <stdlib.h> 
 
-struct catalogo_t 
+typedef struct node_st NODE;
+static void node_destroy( NODE* );
+
+struct node_st
 {
-    JOGO **joguinho;
-    int tamanho_catalogo;
+    JOGO *jogo;
+    NODE *next;
+    NODE *prev;
 };
 
-CATALOGO *make_catalogo(){
-   
-    //Aloca Memória
-    CATALOGO *catalogo = (CATALOGO*) calloc (1,(sizeof(JOGO**) + sizeof(int)));
-    
-    //Pra caso de merda na alocação
-    if (catalogo == NULL)
-    {
-        exit(1);
+struct catalogo_t 
+{
+    NODE *begin;
+    NODE *end;
+    int len;
+};
+
+CATALOGO *catalogo_create() {
+
+    CATALOGO *catalogo = (CATALOGO*) malloc( sizeof(CATALOGO) );
+
+    if( catalogo != NULL ) {
+        catalogo->begin = NULL;
+        catalogo->end = NULL;
+        catalogo->len = 0;
     }
 
-    catalogo->joguinho = NULL;
-    catalogo->tamanho_catalogo = 0; 
-    
-   
     return catalogo;
+
 }
 
-CATALOGO *adicionar_ao_catalogo(CATALOGO *catalogo){
-    CATALOGO *catalogo_backup = catalogo;
+bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo ) {
 
-    //Realoca para adicionar um jogo ao catalogo 
-    catalogo_backup->joguinho = (JOGO**) realloc(catalogo->joguinho,
-                                ((catalogo->tamanho_catalogo)+1)*sizeof(JOGO**));
-    if (catalogo_backup != NULL){
-        catalogo->joguinho = catalogo_backup->joguinho;
-    }
-    else{
-        exit(1);
-    }
-    char *produtora, *ano, *nome;
-    nome = readLine(); //Mudar pra CSV
-    produtora = readLine(); //Mudar pra CSV
-    ano = readLine(); //Mudar pra CSV
-    catalogo->joguinho[catalogo->tamanho_catalogo] = set_jogo(nome, produtora, ano);
-    catalogo->tamanho_catalogo++;
-    catalogo_backup = NULL;
-    return catalogo;  
-} 
+    if ( catalogo != NULL ) {
 
-bool catalogo_apagar(CATALOGO **catalogo, CATALOGO *catalogoo)
-{
+        NODE *newNode = (NODE *) malloc( sizeof(NODE) );
+        newNode->jogo = jogo;
+
+        // Caso lista vazia
+        if ( catalogo->begin == NULL && catalogo->end == NULL ) {
+
+            // O começo da lista é o novoNó
+            catalogo->begin = newNode;
+            // O anterior é ele mesmo                       
+            newNode->prev = newNode;
+        }
+        else {
+
+            // O fim da lista aponta para o novoNo
+            catalogo->end->next = newNode;
+            // O anterior do novoNo é fim antigo
+            newNode->prev = catalogo->end;            
+        }
+
+        // O proximo é o começo da lista
+        newNode->next = catalogo->begin;
+        // O fim da lista é o novoNó
+        catalogo->end = newNode;
+        // Incrementa o tamanho da lista
+        catalogo->len++;
+
+        return true;
+
+    }
+
+    return false;
+
+}
+
+bool catalogo_apagar( CATALOGO **catalogo ) {
     if (*catalogo != NULL)
     {
-        for (size_t i = 0; i < catalogoo->tamanho_catalogo; i++)
-        {
-            jogo_apagar(&(catalogoo->joguinho[i]));
-        }
-        free((catalogoo->joguinho));
-        free (*catalogo);
+        node_destroy( catalogo->begin );
+
+        free( *catalogo );
+
         *catalogo = NULL;
+
         return true;
     }
+
     return false;
+}
+
+static void node_destroy( NODE *node ) {
+
+    if( node != NULL ) {
+
+        if( node->next != NULL )
+            destroy_nodes( node->next );
+
+        jogo_apagar( &node->jogo );
+
+        node->prev = NULL;
+        free( node );
+        node = NULL;
+    }
 }
