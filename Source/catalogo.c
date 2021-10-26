@@ -1,3 +1,11 @@
+/** 
+ * Trabalho 1 - Lista de Jogos
+ * 
+ * Nome: Calvin Suzuki de Camargo 
+ * Número USP: 11232420 
+ * Nome: Guilherme Barros Villela
+ * Número USP: 12549936
+ */
 #include "catalogo.h"
 #include <string.h> 
 #include <stdio.h>

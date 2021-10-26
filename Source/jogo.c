@@ -1,5 +1,5 @@
 /** 
- * Exercício 2 - Catalogo de jogos
+ * Trabalho 1 - Lista de Jogos
  * 
  * Nome: Calvin Suzuki de Camargo 
  * Número USP: 11232420 
