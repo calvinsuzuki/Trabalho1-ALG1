@@ -13,9 +13,6 @@
 #include <stdlib.h> 
 
 typedef struct node_st NODE;
-static void node_destroy( NODE* );
-static *NODE node_search( int );
-
 struct node_st
 {
     JOGO *jogo;
@@ -29,6 +26,9 @@ struct catalogo_t
     NODE *end;
     int len;
 };
+
+static void node_destroy( NODE *node );
+// static *NODE node_search( int index );
 
 CATALOGO *catalogo_create() {
 
@@ -135,6 +135,8 @@ bool catalogo_remove( CATALOGO *catalogo, int index ) {
 //         } 
 //     }
 // }
+
+
 
 bool catalogo_apagar( CATALOGO **catalogo ) {
     if (*catalogo != NULL)

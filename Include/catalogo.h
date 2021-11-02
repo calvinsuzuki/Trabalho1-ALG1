@@ -19,5 +19,8 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo );
 bool catalogo_apagar( CATALOGO **catalogo );
 bool catalogo_isEmpty( CATALOGO *catalogo );
 
+//Operações no Catalogo 
+CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo);
+
 
 #endif //CATALOGO_H
