@@ -18,4 +18,7 @@ CATALOGO *catalogo_create();
 bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo );
 bool catalogo_apagar( CATALOGO **catalogo );
 
+//Funções no catalogo
+CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo); 
+
 #endif //CATALOGO_H

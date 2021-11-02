@@ -187,3 +187,39 @@ CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo){
     }
     return catalogo;     
 }
+
+void search_empresa(char *lista, CATALOGO *catalogo){
+    char *empresa;
+    int count = 0;
+    empresa = readLine();
+    NODE *node = catalogo->begin;
+    for (size_t i = 0; i < (catalogo->len); i++){
+        if (strcmp(get_produtora(node->jogo), empresa) == 0)
+        {
+            strcat(strcat(lista, get_nome(node->jogo)),"\n");
+            count++;
+        }
+    }
+        if (count == 0)
+        {
+            strcat(strcat(lista, "Nada encontrado"),"\n");
+        }
+}
+
+void search_ano(char *lista, CATALOGO *catalogo){
+    char *ano;
+    int count = 0;
+    ano = readLine();
+    NODE *node = catalogo->begin;
+        for (size_t j = 0; j < (get_produtora(node->jogo)); j++){
+            if (strcmp(get_ano(node->jogo), ano) == 0)
+            {
+                strcat(strcat(lista, get_nome(node->jogo)),"\n");
+                count++;
+            }
+        }
+            if (count == 0)
+            {
+                strcat(strcat(lista, "Nada encontrado"),"\n");
+            }
+}
