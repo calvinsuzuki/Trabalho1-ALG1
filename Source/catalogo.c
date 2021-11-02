@@ -6,7 +6,6 @@
  * Nome: Guilherme Barros Villela
  * Número USP: 12549936
  */
-
 #include "catalogo.h"
 #include <string.h> 
 #include <stdio.h>
@@ -78,13 +77,17 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo ) {
     }
 
     return false;
+}
 
+bool catalogo_remove( CATALOGO *catalogo ) {
+
+    
 }
 
 bool catalogo_apagar( CATALOGO **catalogo ) {
     if (*catalogo != NULL)
     {
-        node_destroy( catalogo->begin );
+        node_destroy((*catalogo)->begin);
 
         free( *catalogo );
 

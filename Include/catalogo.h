@@ -16,9 +16,6 @@ typedef struct catalogo_t CATALOGO;
 
 CATALOGO *catalogo_create();
 bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo );
-void search(CATALOGO *catalogo);
-void search_empresa(char *lista, CATALOGO *catalogo);
-void search_ano(char *lista, CATALOGO *catalogo);
-bool catalogo_apagar(CATALOGO **catalogo,CATALOGO *catalogoo);
+bool catalogo_apagar( CATALOGO **catalogo );
 
 #endif //CATALOGO_H
