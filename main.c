@@ -7,7 +7,7 @@
  * Número USP: 12549936
  */
 
-#include "Catalogo/catalogo.h"
+#include "Include/catalogo.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
