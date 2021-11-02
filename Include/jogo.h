@@ -17,6 +17,7 @@ JOGO *set_jogo(char* nome, char* produtora, char* ano);
 char *get_produtora(JOGO* joguinho);
 char *get_ano(JOGO* joguinho);
 char *get_nome(JOGO* joguinho);
+int get_index(JOGO* joguinho);
 bool jogo_apagar(JOGO **jogo);
 
 #endif //JOGO_H  
