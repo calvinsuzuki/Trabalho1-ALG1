@@ -10,14 +10,12 @@
 #ifndef CATALOGO_H 
 #define CATALOGO_H
 #include"jogo.h"
-#include "util.h"
+#include "Util.h"
 
 typedef struct catalogo_t CATALOGO;
 
 CATALOGO *catalogo_create();
 bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo );
 bool catalogo_apagar( CATALOGO **catalogo );
-bool catalogo_isEmpty( CATALOGO *catalogo );
-
 
 #endif //CATALOGO_H

@@ -13,8 +13,9 @@
 #include <stdlib.h> 
 
 typedef struct node_st NODE;
+
 static void node_destroy( NODE* );
-static *NODE node_search( int );
+//static *NODE node_search( int );
 
 struct node_st
 {
@@ -80,19 +81,11 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo ) {
     return false;
 }
 
-bool catalogo_isEmpty( CATALOGO *catalogo ) {
-
-    if ( catalogo != NULL ) {
-
-        return (catalogo->len == 0);
-    }
-}
-
 bool catalogo_remove( CATALOGO *catalogo, int index ) {
 
     if ( catalogo != NULL ) {
 
-        if ( catalogo_isEmpty ) { // Caso o catalogo esteja vazio
+        if ( catalogo->len == 0 ) { // Caso o catalogo esteja vazio
             return false;
         }
 

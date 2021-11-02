@@ -6,7 +6,7 @@
  * Nome: Guilherme Barros Villela
  * Número USP: 12549936
  */
-#include "jogo.h"
+#include "../Include/jogo.h"
 #include <string.h> 
 #include <stdio.h>
 #include <stdlib.h>

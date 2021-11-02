@@ -30,17 +30,39 @@
 #include <stdlib.h>
 #include <string.h>
 
-	int
-	main()
-{
+void readFile();
 
-	CATALOGO *catalogo = Catalogo();
+int main( void ) {
 
-	addJogos(catalogo);
+	// CATALOGO *catalogo = catalogo_create();
 
-	buscaJogos(catalogo);
-
-	destroyCatalogo(catalogo);
+	// Assassin's Creed;2007;Ubisoft
+	// Assassin's Creed IV: Black Flag;2013;Ubisoft
+	// DmC: Devil May Cry;2013;Ninja Theory
+	// Dragon Quest VII;2000;Square Enix
+	// Fable;2004;Lionhead Studios
+	// Assassin's Creed IV: Black Flag;2013;Ubisoft
+	
+	readFile();
 
 	return 0;
 }
+
+
+void readFile() {
+
+	FILE *csv;
+
+	csv = fopen("./CSV.csv", "w");
+
+	if( csv == NULL ) {
+
+		printf("Erro na leitura do arquivo!!");
+
+		exit(1);
+	}
+
+
+
+}
+
