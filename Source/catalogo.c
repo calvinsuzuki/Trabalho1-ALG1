@@ -14,6 +14,7 @@
 
 typedef struct node_st NODE;
 static void node_destroy( NODE* );
+static *NODE node_search( int );
 
 struct node_st
 {
@@ -40,7 +41,6 @@ CATALOGO *catalogo_create() {
     }
 
     return catalogo;
-
 }
 
 bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo ) {
@@ -78,8 +78,63 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo ) {
     }
 
     return false;
-
 }
+
+bool catalogo_isEmpty( CATALOGO *catalogo ) {
+
+    if ( catalogo != NULL ) {
+
+        return (catalogo->len == 0);
+    }
+}
+
+bool catalogo_remove( CATALOGO *catalogo, int index ) {
+
+    if ( catalogo != NULL ) {
+
+        if ( catalogo_isEmpty ) { // Caso o catalogo esteja vazio
+            return false;
+        }
+
+        NODE *node = catalogo->begin;
+
+        for( int i = 0; i < catalogo->len; i++ ) {
+
+            if( get_index( node->jogo ) == index ) {
+
+                node->prev->next = node->next;
+                node->next->prev = node->prev;
+
+                node->prev = NULL;
+                node->next = NULL;
+                free( node );
+
+                return true;
+
+            }
+            else {
+
+                node = node->next;
+            }
+        }
+    }
+
+    return false;
+}
+
+// static *NODE node_search( int index ) {
+
+//     if( node != NULL ) {
+
+//         if( get_index(node->jogo) == index ) {
+//             return node;
+//         }
+
+//         else if( node->next != NULL ) {
+//             node_comp( node->next )
+//         } 
+//     }
+// }
 
 bool catalogo_apagar( CATALOGO **catalogo ) {
     if (*catalogo != NULL)
@@ -101,7 +156,7 @@ static void node_destroy( NODE *node ) {
     if( node != NULL ) {
 
         if( node->next != NULL )
-            destroy_nodes( node->next );
+            node_destroy( node->next );
 
         jogo_apagar( &node->jogo );
 

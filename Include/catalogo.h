@@ -17,5 +17,7 @@ typedef struct catalogo_t CATALOGO;
 CATALOGO *catalogo_create();
 bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo );
 bool catalogo_apagar( CATALOGO **catalogo );
+bool catalogo_isEmpty( CATALOGO *catalogo );
+
 
 #endif //CATALOGO_H
