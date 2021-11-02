@@ -1,4 +1,4 @@
-UTIL=Jogo/jogo.c Catalogo/catalogo.c
+UTIL=Source/jogo.c Source/catalogo.c Source/Util.c
 MAIN=main.c
 BINARY=Main
 ZIP=Ex2

@@ -1,4 +1,4 @@
-/** 
+/** void readFile()
  * Trabalho 1 - Lista de Jogos
  * 
  * Nome: Calvin Suzuki de Camargo 
