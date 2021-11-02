@@ -30,17 +30,48 @@
 #include <stdlib.h>
 #include <string.h>
 
-	int
-	main()
-{
+void readFile();
 
-	CATALOGO *catalogo = Catalogo();
+int main() {
 
-	addJogos(catalogo);
+	// Assassin's Creed;2007;Ubisoft
+	// Assassin's Creed IV: Black Flag;2013;Ubisoft
+	// DmC: Devil May Cry;2013;Ninja Theory
+	// Dragon Quest VII;2000;Square Enix
+	// Fable;2004;Lionhead Studios
+	// Assassin's Creed IV: Black Flag;2013;Ubisoft
 
-	buscaJogos(catalogo);
-
-	destroyCatalogo(catalogo);
+	readFile();	
 
 	return 0;
 }
+
+void readFile() {
+
+	FILE *csv;
+
+	char str[100], str2[100];
+
+	csv = fopen("CSV.csv", "r");
+
+	if ( csv == NULL ) {
+
+		printf("Erro na leitura do arquivo!!\n");
+		exit(1);
+	}
+
+	fscanf(csv, "%*c%*c%*c"); // ignore the first 3 characters
+
+	//TODO: fazer funcionar
+	fscanf(csv, "%[^(;|\n|\r)]%*c", str);
+
+	printf("String: %s\n", str);
+
+	fscanf(csv, "%[^(\n|\r)]%*c", str2);
+	
+	printf("String: %s\n", str2);
+	
+	fclose(csv);
+
+}
+
