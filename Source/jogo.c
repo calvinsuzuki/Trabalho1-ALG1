@@ -16,7 +16,7 @@ struct jogo_t
     char *nome;
     char *produtora; 
     char *ano;
-    int posicao;
+    int index;
 };
 
 JOGO* set_jogo(char* nome, char* produtora, char* ano){
@@ -35,7 +35,7 @@ JOGO* set_jogo(char* nome, char* produtora, char* ano){
     strcpy(joguinho->nome, nome);
     strcpy(joguinho->produtora, produtora);
     strcpy(joguinho->ano, ano);
-    joguinho->posicao = 0; 
+    joguinho->index = 0; 
 
     return joguinho;
 }
@@ -48,6 +48,9 @@ char *get_produtora(JOGO* joguinho){
 }
 char *get_nome(JOGO* joguinho){
     return joguinho->nome;
+}
+int get_index(JOGO* joguinho){
+    return joguinho->index;
 }
 
 bool jogo_apagar(JOGO **jogo)
