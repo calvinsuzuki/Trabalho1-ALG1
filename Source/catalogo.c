@@ -7,7 +7,7 @@
  * Número USP: 12549936
  */
 
-#include "catalogo.h"
+#include "Include/catalogo.h"
 #include <string.h> 
 #include <stdio.h>
 #include <stdlib.h> 
@@ -84,7 +84,7 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo ) {
 bool catalogo_apagar( CATALOGO **catalogo ) {
     if (*catalogo != NULL)
     {
-        node_destroy( catalogo->begin );
+        node_destroy((*catalogo)->begin);
 
         free( *catalogo );
 

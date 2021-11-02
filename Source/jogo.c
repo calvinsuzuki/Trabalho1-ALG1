@@ -21,17 +21,21 @@ struct jogo_t
 
 JOGO* set_jogo(char* nome, char* produtora, char* ano){
     //Aloca Memória
-    JOGO *joguinho = (JOGO*) calloc (3,sizeof(char));
+    JOGO *joguinho = (JOGO*) calloc (1, sizeof(JOGO));
     
     //Pra caso de merda na alocação
     if (joguinho == NULL)
     {
         exit(1);
     }
-    
+
+    joguinho->nome = (char*) calloc(strlen(nome), sizeof(char) + 1);
+    joguinho->produtora = (char*) calloc(strlen(nome), sizeof(char) + 1);
+    joguinho->ano = (char*) calloc(strlen(nome), sizeof(char) + 1);
     strcpy(joguinho->nome, nome);
     strcpy(joguinho->produtora, produtora);
     strcpy(joguinho->ano, ano);
+    joguinho->posicao = 0; 
 
     return joguinho;
 }
