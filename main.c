@@ -50,7 +50,11 @@ void readFile() {
 
 	FILE *csv;
 
-	char str[100], str2[100];
+	char junk;
+
+	char* nome = (char *) calloc(100, sizeof(char) );
+    char* ano = (char *) calloc(100, sizeof(char) );
+    char* produtora = (char *) calloc(100, sizeof(char) );
 
 	csv = fopen("CSV.csv", "r");
 
@@ -60,16 +64,39 @@ void readFile() {
 		exit(1);
 	}
 
-	fscanf(csv, "%*c%*c%*c"); // ignore the first 3 characters
+	fseek(csv, 3, SEEK_CUR); // ignore the first 3 characters
 
-	//TODO: fazer funcionar
-	fscanf(csv, "%[^(;|\n|\r)]%*c", str);
+	while( !feof(csv) ) {
 
-	printf("String: %s\n", str);
+		fscanf(csv, "%[^;]%*c", nome);
+		// printf("String: %s\n", str1);
 
-	fscanf(csv, "%[^(\n|\r)]%*c", str2);
-	
-	printf("String: %s\n", str2);
+		if( strcmp(nome, "") == 0 ) break;		
+
+		fscanf(csv, "%[^;]%*c", ano);		
+		// printf("String: %s\n", str2);
+
+		fscanf(csv, "%[^(\n|\r)]", produtora);		
+		// printf("String: %s\n", str3);
+
+		// catalogo_insert( catalogo, set_jogo( nome, ano, produtora ) );
+
+		fscanf(csv, "%c", &junk);
+
+		if (junk == '\r') {
+
+			fseek(csv, 1, SEEK_CUR);
+		}
+
+		nome = NULL; ano = NULL; produtora = NULL;
+
+		nome = (char *) calloc(100, sizeof(char) );
+    	ano = (char *) calloc(100, sizeof(char) );
+    	produtora = (char *) calloc(100, sizeof(char) );
+
+	}
+
+	// for( while )
 	
 	fclose(csv);
 
