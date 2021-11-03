@@ -19,5 +19,6 @@ char *get_ano(JOGO* joguinho);
 char *get_nome(JOGO* joguinho);
 int get_index(JOGO* joguinho);
 bool jogo_apagar(JOGO **jogo);
+void set_index(JOGO* joguinho, int index); 
 
 #endif //JOGO_H  

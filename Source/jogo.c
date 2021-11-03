@@ -53,6 +53,10 @@ int get_index(JOGO* joguinho){
     return joguinho->index;
 }
 
+void set_index(JOGO* joguinho, int index){
+    joguinho->index = index;
+}
+
 bool jogo_apagar(JOGO **jogo)
 {
     if (*jogo != NULL)

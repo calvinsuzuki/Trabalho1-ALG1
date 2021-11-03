@@ -61,13 +61,17 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo ) {
             catalogo->begin = newNode;
             // O anterior é ele mesmo                       
             newNode->prev = newNode;
+            // O index dele é 0
+            set_index(newNode->jogo, 0);
         }
         else {
 
             // O fim da lista aponta para o novoNo
             catalogo->end->next = newNode;
             // O anterior do novoNo é fim antigo
-            newNode->prev = catalogo->end;            
+            newNode->prev = catalogo->end;         
+            // O index dele é igual ao index anterior +1
+            set_index(newNode->jogo, get_index(newNode->prev->jogo));   
         }
 
         // O proximo é o começo da lista
@@ -97,6 +101,11 @@ bool catalogo_remove( CATALOGO *catalogo, int index ) {
         for( int i = 0; i < catalogo->len; i++ ) {
 
             if( get_index( node->jogo ) == index ) {
+
+                for (i = i; i < catalogo->len; i++)
+                {
+                    set_index(node->next->jogo, (get_index(node->prev->jogo) + 1));
+                }
 
                 node->prev->next = node->next;
                 node->next->prev = node->prev;
@@ -188,7 +197,7 @@ CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo){
     return catalogo;     
 }
 
-void search_empresa(char *lista, CATALOGO *catalogo){
+void catalogo_search_empresa(char *lista, CATALOGO *catalogo){
     char *empresa;
     int count = 0;
     empresa = readLine();
@@ -199,6 +208,7 @@ void search_empresa(char *lista, CATALOGO *catalogo){
             strcat(strcat(lista, get_nome(node->jogo)),"\n");
             count++;
         }
+        node = node->next;
     }
         if (count == 0)
         {
@@ -206,20 +216,40 @@ void search_empresa(char *lista, CATALOGO *catalogo){
         }
 }
 
-void search_ano(char *lista, CATALOGO *catalogo){
+void catalogo_search_ano(char *lista, CATALOGO *catalogo){
     char *ano;
     int count = 0;
     ano = readLine();
     NODE *node = catalogo->begin;
-        for (size_t j = 0; j < (get_produtora(node->jogo)); j++){
+        for (size_t j = 0; j < (catalogo->len); j++){
             if (strcmp(get_ano(node->jogo), ano) == 0)
             {
                 strcat(strcat(lista, get_nome(node->jogo)),"\n");
                 count++;
             }
+            node = node->next;
         }
-            if (count == 0)
-            {
-                strcat(strcat(lista, "Nada encontrado"),"\n");
-            }
+        if (count == 0)
+        {
+            strcat(strcat(lista, "Nada encontrado"),"\n");
+        }
+}
+
+void catalogo_print(CATALOGO* catalogo){
+    NODE* node = catalogo->begin;
+    do
+    {
+        printf("%s\n", get_nome(node->jogo));
+        node = node->next;
+    } while (node != catalogo->begin);
+    
+    
+}
+
+JOGO* catalogo_search_index(CATALOGO *catalogo, int index){
+    NODE *node = catalogo->begin;
+    for (size_t j = 0; j < index; j++){
+        node = node->next;
+    }
+    return node->jogo;
 }
