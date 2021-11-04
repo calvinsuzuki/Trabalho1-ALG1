@@ -37,6 +37,7 @@ int main() {
 	catalogo_print( catalogo );
 
 	catalogo = catalogo_remove_duplicates(catalogo);
+	//catalogo_remove(catalogo, 1);
 	printf("---------------------------------------\n");
 	catalogo_print(catalogo);
 	catalogo_apagar( &catalogo );
