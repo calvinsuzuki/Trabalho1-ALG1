@@ -15,7 +15,7 @@
 typedef struct node_st NODE;
 
 static void node_destroy( NODE *node, NODE *nodeEnd );
-//static *NODE node_search( int );
+static *CATALOGO catalogo_organize( CATALOGO *catalogo );
 
 struct node_st
 {
@@ -44,7 +44,7 @@ CATALOGO *catalogo_create() {
     return catalogo;
 }
 
-bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo ) {
+bool catalogo_push( CATALOGO *catalogo, JOGO *jogo ) {
 
     if ( catalogo != NULL ) {
 
@@ -83,6 +83,74 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo ) {
     }
 
     return false;
+}
+
+bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index ) {
+
+    if ( catalogo != NULL ) {
+
+        if( index >= catalogo->len ) {
+
+            return false;
+        }
+
+        NODE *newNode = (NODE *) malloc( sizeof(NODE) );
+        newNode->jogo = jogo;
+
+        // Caso lista vazia
+        if ( catalogo->begin == NULL && catalogo->end == NULL ) {
+
+            // O começo da lista é o novoNó
+            catalogo->begin = newNode;
+            // O anterior é ele mesmo                       
+            newNode->prev = newNode;    
+            // O index dele é 0
+            set_index(newNode->jogo, 0);
+        }
+        else {
+
+            // O fim da lista aponta para o novoNo
+            catalogo->end->next = newNode;
+            // O anterior do novoNo é fim antigo
+            newNode->prev = catalogo->end;         
+            // O index dele é igual ao index anterior +1
+            set_index(newNode->jogo, get_index(newNode->prev->jogo)+1);   
+        }
+
+        // O proximo é o começo da lista
+        newNode->next = catalogo->begin;
+        // O fim da lista é o novoNó
+        catalogo->end = newNode;
+        // Incrementa o tamanho da lista
+        catalogo->len++;
+
+        return true;
+
+    }
+
+    return false;
+}
+
+static *CATALOGO catalogo_organize( CATALOGO *catalogo ) {
+
+    NODE *node = catalogo->begin;
+
+    if( catalogo != NULL ) {
+
+        for( int i = 0; i < catalogo->len; i++ ) {
+
+            if( node != NULL && node->next != NULL ) {
+
+                set_index(node->jogo, i); 
+
+                node = node->next;
+            }
+        }
+
+        return catalogo;
+    }
+
+    return NULL;
 }
 
 bool catalogo_remove( CATALOGO *catalogo, int index ) {
@@ -128,14 +196,10 @@ bool catalogo_apagar( CATALOGO **catalogo ) {
 
     if (*catalogo != NULL)
     {   
-
         node_destroy( (*catalogo)->begin, (*catalogo)->end );
-
-        printf("\nnodes destroyed!!\n\n");
+        //printf("\nnodes destroyed!!\n\n");
         free( *catalogo );
-
         *catalogo = NULL;
-
         return true;
     }
 
@@ -146,13 +210,11 @@ static void node_destroy( NODE *node, NODE *nodeEnd ) {
 
     if( node != NULL ) {
 
-        printf("DELETE GAME %d: %s\n", get_index(node->jogo), get_nome(node->jogo));
-
+        // printf("DELETE GAME %d: %s\n", get_index(node->jogo), get_nome(node->jogo));
         if( node->next != NULL && node != nodeEnd) 
             node_destroy( node->next, nodeEnd );
 
         jogo_apagar( &node->jogo );
-
         node->prev = NULL;
         node->next = NULL;
         free( node );
@@ -165,8 +227,8 @@ CATALOGO* catalogo_importFromFile(char* fileName) {
     FILE *csv;
     CATALOGO *catalogo = catalogo_create();
 
-    if ( catalogo == NULL ) {
-        return NULL;
+    if ( catalogo == NULL ) { // Erro na alocacao
+        exit(1);
     }
 
     char junk;
@@ -174,10 +236,9 @@ CATALOGO* catalogo_importFromFile(char* fileName) {
     char* ano = (char *) calloc(100, sizeof(char) );
     char* produtora = (char *) calloc(100, sizeof(char) );
 
-    csv = fopen(fileName, "r");
+    csv = fopen( fileName, "r" );
 
     if ( csv == NULL ) {
-
         printf("Erro na leitura do arquivo!!\n");
         exit(1);
     }
@@ -197,7 +258,7 @@ CATALOGO* catalogo_importFromFile(char* fileName) {
         fscanf(csv, "%[^(\n|\r)]", produtora);      
         // printf("String: %s\n", str3);
 
-        catalogo_insert( catalogo, set_jogo( nome, ano, produtora ) );
+        catalogo_push( catalogo, set_jogo( nome, ano, produtora ) );
 
         fscanf(csv, "%c", &junk);
 
@@ -209,7 +270,6 @@ CATALOGO* catalogo_importFromFile(char* fileName) {
         nome = (char *) calloc(100, sizeof(char) );
         ano = (char *) calloc(100, sizeof(char) );
         produtora = (char *) calloc(100, sizeof(char) );
-
     }
 
     free( nome ); free( ano ); free( produtora );
@@ -287,9 +347,7 @@ void catalogo_print(CATALOGO* catalogo) {
     {
         printf("%s\n", get_nome(node->jogo));
         node = node->next;
-    } while (node != catalogo->begin);
-    
-    
+    } while (node != catalogo->begin);  
 }
 
 JOGO* catalogo_search_index(CATALOGO *catalogo, int index) {

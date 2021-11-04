@@ -15,7 +15,8 @@
 typedef struct catalogo_t CATALOGO;
 
 CATALOGO *catalogo_create();
-bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo );
+bool catalogo_push( CATALOGO *catalogo, JOGO *jogo );
+bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index );
 bool catalogo_apagar( CATALOGO **catalogo );
 
 //Funções no catalogo
@@ -25,5 +26,6 @@ void catalogo_search_empresa(char *lista, CATALOGO *catalogo);
 void catalogo_search_ano(char *lista, CATALOGO *catalogo);
 void catalogo_print(CATALOGO* catalogo);
 JOGO* catalogo_search_index(CATALOGO *catalogo, int index);
+
 
 #endif //CATALOGO_H
