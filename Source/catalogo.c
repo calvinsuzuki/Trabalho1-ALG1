@@ -357,7 +357,8 @@ void catalogo_print(CATALOGO* catalogo) {
     NODE* node = catalogo->begin;
     do
     {
-        printf("%s %d\n", get_nome(node->jogo), get_index(node->jogo));
+        printf("Nome: %s Produtora: %s Ano: %s Index: %d\n", 
+            get_nome(node->jogo), get_ano(node->jogo), get_produtora(node->jogo), get_index(node->jogo));
         node = node->next;
     } while (node != catalogo->begin);  
 }

@@ -33,13 +33,89 @@
 int main() {
 
 	CATALOGO *catalogo = catalogo_importFromFile("CSV.csv");
+	char busca[10];
 
-	catalogo_print( catalogo );
+	do
+	{
+		scanf("%[^\n]%*c", busca); 
+		if (strcmp(busca, "r") == 0)
+		{
+			catalogo = catalogo_remove_duplicates(catalogo);
+			catalogo_print(catalogo);
+		}
+		else if (strcmp(busca, "p") == 0)
+		{
+			char *lista, *lista_backup;
+			int count = 0;
+			lista = (char*) calloc (1, sizeof(char));
+			lista_backup = lista;
 
-	catalogo = catalogo_remove_duplicates(catalogo);
-	//catalogo_remove(catalogo, 1);
-	printf("---------------------------------------\n");
-	catalogo_print(catalogo);
+			//Adiciona o espaço de um nome de jogo por realloc
+			lista_backup = (char*) realloc(lista, 101*sizeof(char)*(count+1)); 
+			if (lista_backup != NULL){
+				lista = lista_backup;
+				count++;
+			}
+			else{
+				exit(1);
+			}
+
+			catalogo_search_empresa(lista, catalogo);
+			printf("%s", lista);
+            free(lista);
+			free(lista_backup);
+            lista = NULL;
+            lista_backup = NULL;
+
+		}
+		else if (strcmp(busca, "a") == 0)
+		{
+			char *lista, *lista_backup;
+			int count = 0;
+			lista = (char*) calloc (1, sizeof(char));
+			lista_backup = lista;
+
+			//Adiciona o espaço de um nome de jogo por realloc
+			lista_backup = (char*) realloc(lista, 101*sizeof(char)*(count+1)); 
+			if (lista_backup != NULL){
+				lista = lista_backup;
+				count++;
+			}
+			else{
+				exit(1);
+			}
+
+			catalogo_search_ano(lista, catalogo);
+			printf("%s", lista);
+            free(lista);
+			free(lista_backup);
+            lista = NULL;
+            lista_backup = NULL;
+
+		}
+		else if (strcmp(busca, "i") == 0)
+		{
+			catalogo_print(catalogo);
+		}
+		else if (strcmp(busca, "u") == 0)
+		{
+			int index; 
+			scanf("%d", &index);
+			printf("%s", (get_nome(catalogo_search_index(catalogo, index))));
+		}
+		else if (strcmp(busca, "f") == 0)
+		{
+			
+		}
+		else
+		{
+			printf("Comando Inválido \n");
+		}
+		
+		
+		
+		
+	} while (strcmp(busca, "f") != 0);
 	catalogo_apagar( &catalogo );
 
 	// Assassin's Creed;2007;Ubisoft
