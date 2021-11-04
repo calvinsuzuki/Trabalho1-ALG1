@@ -14,7 +14,7 @@
 
 typedef struct node_st NODE;
 
-static void node_destroy( NODE* );
+static void node_destroy( NODE *node, NODE *nodeEnd );
 //static *NODE node_search( int );
 
 struct node_st
@@ -30,9 +30,6 @@ struct catalogo_t
     NODE *end;
     int len;
 };
-
-static void node_destroy( NODE *node );
-// static *NODE node_search( int index );
 
 CATALOGO *catalogo_create() {
 
@@ -60,7 +57,7 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo ) {
             // O começo da lista é o novoNó
             catalogo->begin = newNode;
             // O anterior é ele mesmo                       
-            newNode->prev = newNode;
+            newNode->prev = newNode;    
             // O index dele é 0
             set_index(newNode->jogo, 0);
         }
@@ -71,7 +68,7 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo ) {
             // O anterior do novoNo é fim antigo
             newNode->prev = catalogo->end;         
             // O index dele é igual ao index anterior +1
-            set_index(newNode->jogo, get_index(newNode->prev->jogo));   
+            set_index(newNode->jogo, get_index(newNode->prev->jogo)+1);   
         }
 
         // O proximo é o começo da lista
@@ -127,29 +124,14 @@ bool catalogo_remove( CATALOGO *catalogo, int index ) {
     return false;
 }
 
-// static *NODE node_search( int index ) {
-
-//     if( node != NULL ) {
-
-//         if( get_index(node->jogo) == index ) {
-//             return node;
-//         }
-
-//         else if( node->next != NULL ) {
-//             node_comp( node->next )
-//         } 
-//     }
-// }
-
-
-
 bool catalogo_apagar( CATALOGO **catalogo ) {
 
     if (*catalogo != NULL)
-    {
-        
-        node_destroy((*catalogo)->begin);
-        printf("\n\nnodes destroyed!!\n\n");
+    {   
+
+        node_destroy( (*catalogo)->begin, (*catalogo)->end );
+
+        printf("\nnodes destroyed!!\n\n");
         free( *catalogo );
 
         *catalogo = NULL;
@@ -160,17 +142,19 @@ bool catalogo_apagar( CATALOGO **catalogo ) {
     return false;
 }
 
-static void node_destroy( NODE *node ) {
+static void node_destroy( NODE *node, NODE *nodeEnd ) {
 
     if( node != NULL ) {
 
-        printf("\n\nNON NULL\n\n");
-        if( node->next != NULL )
-            node_destroy( node->next );
+        printf("DELETE GAME %d: %s\n", get_index(node->jogo), get_nome(node->jogo));
+
+        if( node->next != NULL && node != nodeEnd) 
+            node_destroy( node->next, nodeEnd );
 
         jogo_apagar( &node->jogo );
 
         node->prev = NULL;
+        node->next = NULL;
         free( node );
         node = NULL;
     }

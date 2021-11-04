@@ -38,7 +38,7 @@ int main() {
 
 	catalogo_print( catalogo );
 
-	// catalogo_apagar( &(catalogo) );
+	catalogo_apagar( &catalogo );
 
 	// Assassin's Creed;2007;Ubisoft
 	// Assassin's Creed IV: Black Flag;2013;Ubisoft
@@ -56,7 +56,6 @@ CATALOGO* importCatalogoFromFile() {
 	CATALOGO *catalogo = catalogo_create();
 
 	if ( catalogo == NULL ) {
-
 		return NULL;
 	}
 
@@ -82,7 +81,7 @@ CATALOGO* importCatalogoFromFile() {
 
 		if( strcmp(nome, "") == 0 ) break;		
 
-		fscanf(csv, "%[^;]%*c", ano);		
+		fscanf(csv, "%[^;]%*c", ano);
 		// printf("String: %s\n", str2);
 
 		fscanf(csv, "%[^(\n|\r)]", produtora);		
@@ -97,13 +96,13 @@ CATALOGO* importCatalogoFromFile() {
 			fseek(csv, 1, SEEK_CUR); // Skips '/n'
 		}
 
-		nome = NULL; ano = NULL; produtora = NULL;
-
 		nome = (char *) calloc(100, sizeof(char) );
     	ano = (char *) calloc(100, sizeof(char) );
     	produtora = (char *) calloc(100, sizeof(char) );
 
 	}
+
+	free( nome ); free( ano ); free( produtora );
 	
 	fclose(csv);
 

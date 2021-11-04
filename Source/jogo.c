@@ -21,21 +21,29 @@ struct jogo_t
 
 JOGO* set_jogo(char* nome, char* produtora, char* ano){
     //Aloca Memória
-    JOGO *joguinho = (JOGO*) calloc (1, sizeof(JOGO));
+    JOGO *joguinho = (JOGO*) malloc( sizeof(JOGO) );
     
-    //Pra caso de merda na alocação
+    //Erro na alocação
     if (joguinho == NULL)
     {
         exit(1);
     }
 
-    joguinho->nome = (char*) calloc(strlen(nome), sizeof(char) + 1);
-    joguinho->produtora = (char*) calloc(strlen(nome), sizeof(char) + 1);
-    joguinho->ano = (char*) calloc(strlen(nome), sizeof(char) + 1);
+    joguinho->nome =       (char*) malloc(strlen(nome) * sizeof(char) + 1);
+    joguinho->produtora =  (char*) malloc(strlen(produtora) * sizeof(char) + 1);
+    joguinho->ano =        (char*) malloc(strlen(ano) * sizeof(char) + 1);
+
+    //Erro na alocação
+    if ( joguinho->nome == NULL || joguinho->ano == NULL || joguinho->produtora == NULL) {
+
+        exit(1);
+    }
     strcpy(joguinho->nome, nome);
     strcpy(joguinho->produtora, produtora);
     strcpy(joguinho->ano, ano);
     joguinho->index = 0; 
+
+    free( nome ); free( ano ); free( produtora );
 
     return joguinho;
 }
@@ -60,7 +68,10 @@ void set_index(JOGO* joguinho, int index){
 bool jogo_apagar(JOGO **jogo)
 {
     if (*jogo != NULL)
-    {
+    {   
+        free( (*jogo)->ano );
+        free( (*jogo)->produtora );
+        free( (*jogo)->nome );
         free (*jogo);
         *jogo = NULL;
         return true;
