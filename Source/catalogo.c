@@ -99,6 +99,8 @@ bool catalogo_remove( CATALOGO *catalogo, int index ) {
 
             if( get_index( node->jogo ) == index ) {
 
+                printf("%s \n\n", get_nome(node->jogo));
+
                 for (i = i; i < catalogo->len; i++)
                 {
                     set_index(node->next->jogo, (get_index(node->prev->jogo) + 1));
@@ -109,6 +111,7 @@ bool catalogo_remove( CATALOGO *catalogo, int index ) {
 
                 node->prev = NULL;
                 node->next = NULL;
+                node->jogo = NULL;
                 free( node );
 
                 return true;
@@ -220,7 +223,7 @@ CATALOGO* catalogo_importFromFile(char* fileName) {
 }
 
 CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo){
-    int counter = 0, index_aux = 1;
+    int counter = 1, index_aux = 1;
     NODE* node = catalogo->begin, *node_auxiliar = node;
     while (counter < catalogo->len)
     {
@@ -228,6 +231,9 @@ CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo){
         {
             if (strcmp(get_nome(node->jogo), get_nome(node_auxiliar->next->jogo)) == 0)
             {
+                printf("\n\n %s, %s \n\n", get_nome(node->jogo), get_nome(node_auxiliar->next->jogo));
+                printf("OIIIIIII \n\n");
+                printf("%d", index);
                 catalogo_remove(catalogo, index_aux);
             }
             else

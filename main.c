@@ -36,6 +36,9 @@ int main() {
 
 	catalogo_print( catalogo );
 
+	catalogo = catalogo_remove_duplicates(catalogo);
+	printf("---------------------------------------\n");
+	catalogo_print(catalogo);
 	catalogo_apagar( &catalogo );
 
 	// Assassin's Creed;2007;Ubisoft
