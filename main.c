@@ -30,11 +30,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-CATALOGO* importCatalogoFromFile();
-
 int main() {
 
-	CATALOGO *catalogo = importCatalogoFromFile();
+	CATALOGO *catalogo = catalogo_importFromFile("CSV.csv");
 
 	catalogo_print( catalogo );
 
@@ -49,64 +47,3 @@ int main() {
 
 	return 0;
 }
-
-CATALOGO* importCatalogoFromFile() {
-
-	FILE *csv;
-	CATALOGO *catalogo = catalogo_create();
-
-	if ( catalogo == NULL ) {
-		return NULL;
-	}
-
-	char junk;
-	char* nome = (char *) calloc(100, sizeof(char) );
-    char* ano = (char *) calloc(100, sizeof(char) );
-    char* produtora = (char *) calloc(100, sizeof(char) );
-
-	csv = fopen("CSV.csv", "r");
-
-	if ( csv == NULL ) {
-
-		printf("Erro na leitura do arquivo!!\n");
-		exit(1);
-	}
-
-	fseek(csv, 3, SEEK_CUR); // ignore the first 3 characters
-
-	while( !feof(csv) ) {
-
-		fscanf(csv, "%[^;]%*c", nome);
-		// printf("String: %s\n", str1);
-
-		if( strcmp(nome, "") == 0 ) break;		
-
-		fscanf(csv, "%[^;]%*c", ano);
-		// printf("String: %s\n", str2);
-
-		fscanf(csv, "%[^(\n|\r)]", produtora);		
-		// printf("String: %s\n", str3);
-
-		catalogo_insert( catalogo, set_jogo( nome, ano, produtora ) );
-
-		fscanf(csv, "%c", &junk);
-
-		if (junk == '\r') {
-
-			fseek(csv, 1, SEEK_CUR); // Skips '/n'
-		}
-
-		nome = (char *) calloc(100, sizeof(char) );
-    	ano = (char *) calloc(100, sizeof(char) );
-    	produtora = (char *) calloc(100, sizeof(char) );
-
-	}
-
-	free( nome ); free( ano ); free( produtora );
-	
-	fclose(csv);
-
-	return catalogo;
-
-}
-

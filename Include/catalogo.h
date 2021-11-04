@@ -19,6 +19,7 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo );
 bool catalogo_apagar( CATALOGO **catalogo );
 
 //Funções no catalogo
+CATALOGO* catalogo_importFromFile(char* fileName);
 CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo); 
 void catalogo_search_empresa(char *lista, CATALOGO *catalogo);
 void catalogo_search_ano(char *lista, CATALOGO *catalogo);
