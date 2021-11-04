@@ -20,7 +20,9 @@ bool catalogo_apagar( CATALOGO **catalogo );
 
 //Funções no catalogo
 CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo); 
-void search_empresa(char *lista, CATALOGO *catalogo);
-void search_ano(char *lista, CATALOGO *catalogo);
+void catalogo_search_empresa(char *lista, CATALOGO *catalogo);
+void catalogo_search_ano(char *lista, CATALOGO *catalogo);
+void catalogo_print(CATALOGO* catalogo);
+JOGO* catalogo_search_index(CATALOGO *catalogo, int index);
 
 #endif //CATALOGO_H

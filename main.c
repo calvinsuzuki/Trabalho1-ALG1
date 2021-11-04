@@ -30,9 +30,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-void readFile();
+CATALOGO* importCatalogoFromFile();
 
 int main() {
+
+	CATALOGO *catalogo = importCatalogoFromFile();
+
+	catalogo_print( catalogo );
+
+	// catalogo_apagar( &(catalogo) );
 
 	// Assassin's Creed;2007;Ubisoft
 	// Assassin's Creed IV: Black Flag;2013;Ubisoft
@@ -41,17 +47,20 @@ int main() {
 	// Fable;2004;Lionhead Studios
 	// Assassin's Creed IV: Black Flag;2013;Ubisoft
 
-	readFile();	
-
 	return 0;
 }
 
-void readFile() {
+CATALOGO* importCatalogoFromFile() {
 
 	FILE *csv;
+	CATALOGO *catalogo = catalogo_create();
+
+	if ( catalogo == NULL ) {
+
+		return NULL;
+	}
 
 	char junk;
-
 	char* nome = (char *) calloc(100, sizeof(char) );
     char* ano = (char *) calloc(100, sizeof(char) );
     char* produtora = (char *) calloc(100, sizeof(char) );
@@ -79,13 +88,13 @@ void readFile() {
 		fscanf(csv, "%[^(\n|\r)]", produtora);		
 		// printf("String: %s\n", str3);
 
-		// catalogo_insert( catalogo, set_jogo( nome, ano, produtora ) );
+		catalogo_insert( catalogo, set_jogo( nome, ano, produtora ) );
 
 		fscanf(csv, "%c", &junk);
 
 		if (junk == '\r') {
 
-			fseek(csv, 1, SEEK_CUR);
+			fseek(csv, 1, SEEK_CUR); // Skips '/n'
 		}
 
 		nome = NULL; ano = NULL; produtora = NULL;
@@ -95,10 +104,10 @@ void readFile() {
     	produtora = (char *) calloc(100, sizeof(char) );
 
 	}
-
-	// for( while )
 	
 	fclose(csv);
+
+	return catalogo;
 
 }
 

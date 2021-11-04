@@ -144,10 +144,12 @@ bool catalogo_remove( CATALOGO *catalogo, int index ) {
 
 
 bool catalogo_apagar( CATALOGO **catalogo ) {
+
     if (*catalogo != NULL)
     {
+        
         node_destroy((*catalogo)->begin);
-
+        printf("\n\nnodes destroyed!!\n\n");
         free( *catalogo );
 
         *catalogo = NULL;
@@ -162,6 +164,7 @@ static void node_destroy( NODE *node ) {
 
     if( node != NULL ) {
 
+        printf("\n\nNON NULL\n\n");
         if( node->next != NULL )
             node_destroy( node->next );
 
@@ -197,7 +200,7 @@ CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo){
     return catalogo;     
 }
 
-void catalogo_search_empresa(char *lista, CATALOGO *catalogo){
+void catalogo_search_empresa(char *lista, CATALOGO *catalogo) {
     char *empresa;
     int count = 0;
     empresa = readLine();
@@ -216,7 +219,7 @@ void catalogo_search_empresa(char *lista, CATALOGO *catalogo){
         }
 }
 
-void catalogo_search_ano(char *lista, CATALOGO *catalogo){
+void catalogo_search_ano(char *lista, CATALOGO *catalogo) {
     char *ano;
     int count = 0;
     ano = readLine();
@@ -235,7 +238,7 @@ void catalogo_search_ano(char *lista, CATALOGO *catalogo){
         }
 }
 
-void catalogo_print(CATALOGO* catalogo){
+void catalogo_print(CATALOGO* catalogo) {
     NODE* node = catalogo->begin;
     do
     {
@@ -246,7 +249,7 @@ void catalogo_print(CATALOGO* catalogo){
     
 }
 
-JOGO* catalogo_search_index(CATALOGO *catalogo, int index){
+JOGO* catalogo_search_index(CATALOGO *catalogo, int index) {
     NODE *node = catalogo->begin;
     for (size_t j = 0; j < index; j++){
         node = node->next;
