@@ -89,42 +89,10 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index ) {
 
     if ( catalogo != NULL ) {
 
-        if( index > catalogo->len ) {
+        if ( catalogo->begin == NULL && catalogo->end == NULL ){
 
-            return false;
+            
         }
-
-        NODE *newNode = (NODE *) malloc( sizeof(NODE) );
-        NODE *indexNode;
-        newNode->jogo = jogo;
-
-        // Caso lista vazia
-        if ( catalogo->begin == NULL && catalogo->end == NULL ) {
-
-            // O começo da lista é o novoNó
-            catalogo->begin = newNode;
-            // O anterior é ele mesmo                       
-            newNode->prev = newNode;    
-            // O index dele é 0
-            jogo_set_index(newNode->jogo, 0);
-        }
-        else {
-
-
-            // O fim da lista aponta para o novoNo
-            catalogo->end->next = newNode;
-            // O anterior do novoNo é fim antigo
-            newNode->prev = catalogo->end;         
-            // O index dele é igual ao index anterior +1
-            jogo_set_index(newNode->jogo, jogo_get_index(newNode->prev->jogo)+1);   
-        }
-
-        // O proximo é o começo da lista
-        newNode->next = catalogo->begin;
-        // O fim da lista é o novoNó
-        catalogo->end = newNode;
-        // Incrementa o tamanho da lista
-        catalogo->len++;
 
         return true;
 
