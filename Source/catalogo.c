@@ -108,7 +108,7 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index ) {
             set_index(newNode->jogo, 0);
         }
         else {
-
+|
             // O fim da lista aponta para o novoNo
             catalogo->end->next = newNode;
             // O anterior do novoNo é fim antigo
@@ -173,11 +173,7 @@ bool catalogo_remove( CATALOGO *catalogo, int index ) {
                 if (node == catalogo->end)
                 {
                     catalogo->end = node->prev;
-                }
-                
-                
-
-                
+                }   
 
                 node->prev->next = node->next;
                 node->next->prev = node->prev;
@@ -238,15 +234,11 @@ CATALOGO* catalogo_importFromFile(char* fileName) {
 
     FILE *csv;
     CATALOGO *catalogo = catalogo_create();
+    char junk, *nome, *ano, *produtora;
 
     if ( catalogo == NULL ) { // Erro na alocacao
         exit(1);
-    }
-
-    char junk;
-    char* nome = (char *) calloc(100, sizeof(char) );
-    char* ano = (char *) calloc(100, sizeof(char) );
-    char* produtora = (char *) calloc(100, sizeof(char) );
+    }    
 
     csv = fopen( fileName, "r" );
 
@@ -255,33 +247,30 @@ CATALOGO* catalogo_importFromFile(char* fileName) {
         exit(1);
     }
 
-    fseek(csv, 3, SEEK_CUR); // ignore the first 3 characters
+    fseek(csv, 3, SEEK_CUR); // Ignora os 3 primeiros chars
 
     while( !feof(csv) ) {
-
-        fscanf(csv, "%[^;]%*c", nome);
-        // printf("String: %s\n", str1);
-
-        if( strcmp(nome, "") == 0 ) break;      
-
-        fscanf(csv, "%[^;]%*c", ano);
-        // printf("String: %s\n", str2);
-
-        fscanf(csv, "%[^(\n|\r)]", produtora);      
-        // printf("String: %s\n", str3);
-
-        catalogo_push( catalogo, set_jogo( nome, ano, produtora ) );
-
-        fscanf(csv, "%c", &junk);
-
-        if (junk == '\r') {
-
-            fseek(csv, 1, SEEK_CUR); // Skips '/n'
-        }
 
         nome = (char *) calloc(100, sizeof(char) );
         ano = (char *) calloc(100, sizeof(char) );
         produtora = (char *) calloc(100, sizeof(char) );
+
+        fscanf(csv, "%[^;]%*c", nome);
+
+        if( strcmp(nome, "") == 0 ) break;  // Caso leitura de string vazia    
+
+        fscanf(csv, "%[^;]%*c", ano);
+
+        fscanf(csv, "%[^(\n|\r)]", produtora);      
+
+        catalogo_push( catalogo, set_jogo( nome, ano, produtora ) );
+
+        fscanf(csv, "%c", &junk); // Captura o proximo caractere do arquivo
+
+        if (junk == '\r') {
+
+            fseek(csv, 1, SEEK_CUR); // Pula o '/n'
+        }        
     }
 
     free( nome ); free( ano ); free( produtora );
