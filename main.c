@@ -33,89 +33,53 @@
 int main() {
 
 	CATALOGO *catalogo = catalogo_importFromFile("CSV.csv");
-	char busca[10];
+
+	char option[100];
 
 	do
-	{
-		scanf("%[^\n]%*c", busca); 
-		if (strcmp(busca, "r") == 0)
+	{	
+		scanf(" %[^(\r|\n| )]%*c", option); 
+
+		if (strcmp(option, "r") == 0) // Remove duplicados
 		{
 			catalogo = catalogo_remove_duplicates(catalogo);
 			catalogo_print(catalogo);
+
 		}
-		else if (strcmp(busca, "p") == 0)
+		else if (strcmp(option, "p") == 0) // Pesquisa por produtora
+		{	
+			char *busca = readLine();
+
+			catalogo_srcProdutora( catalogo, busca);
+
+			free ( busca );
+		}
+		else if (strcmp(option, "a") == 0) // Pesquisa por ano
 		{
-			char *lista, *lista_backup;
-			int count = 0;
-			lista = (char*) calloc (1, sizeof(char));
-			lista_backup = lista;
+			char *busca = readLine();
 
-			//Adiciona o espaço de um nome de jogo por realloc
-			lista_backup = (char*) realloc(lista, 101*sizeof(char)*(count+1)); 
-			if (lista_backup != NULL){
-				lista = lista_backup;
-				count++;
-			}
-			else{
-				exit(1);
-			}
+			catalogo_srcAno( catalogo, busca);
 
-			catalogo_search_empresa(lista, catalogo);
-			printf("%s", lista);
-            free(lista);
-			free(lista_backup);
-            lista = NULL;
-            lista_backup = NULL;
-
+			free ( busca );
 		}
-		else if (strcmp(busca, "a") == 0)
-		{
-			char *lista, *lista_backup;
-			int count = 0;
-			lista = (char*) calloc (1, sizeof(char));
-			lista_backup = lista;
-
-			//Adiciona o espaço de um nome de jogo por realloc
-			lista_backup = (char*) realloc(lista, 101*sizeof(char)*(count+1)); 
-			if (lista_backup != NULL){
-				lista = lista_backup;
-				count++;
-			}
-			else{
-				exit(1);
-			}
-
-			catalogo_search_ano(lista, catalogo);
-			printf("%s", lista);
-            free(lista);
-			free(lista_backup);
-            lista = NULL;
-            lista_backup = NULL;
-
-		}
-		else if (strcmp(busca, "i") == 0)
+		else if (strcmp(option, "i") == 0) // Imprime catalogo
 		{
 			catalogo_print(catalogo);
 		}
-		else if (strcmp(busca, "u") == 0)
+		else if (strcmp(option, "u") == 0) // Imprime jogo dado uma posicao
 		{
 			int index; 
 			scanf("%d", &index);
-			printf("%s", (get_nome(catalogo_search_index(catalogo, index))));
+			printf( "%s\n", jogo_getNome( catalogo_srcIndex(catalogo, index) ) );
+ 
 		}
-		else if (strcmp(busca, "f") == 0)
-		{
-			
-		}
-		else
+		else if (strcmp(option, "f") != 0)
 		{
 			printf("Comando Inválido \n");
 		}
 		
-		
-		
-		
-	} while (strcmp(busca, "f") != 0);
+	} while( strcmp(option, "f") != 0 );
+
 	catalogo_apagar( &catalogo );
 
 	// Assassin's Creed;2007;Ubisoft

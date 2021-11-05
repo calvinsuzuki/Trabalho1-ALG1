@@ -59,7 +59,7 @@ bool catalogo_push( CATALOGO *catalogo, JOGO *jogo ) {
             // O anterior é ele mesmo                       
             newNode->prev = newNode;    
             // O index dele é 0
-            set_index(newNode->jogo, 0);
+            jogo_setIndex(newNode->jogo, 0);
         }
         else {
 
@@ -68,7 +68,7 @@ bool catalogo_push( CATALOGO *catalogo, JOGO *jogo ) {
             // O anterior do novoNo é fim antigo
             newNode->prev = catalogo->end;         
             // O index dele é igual ao index anterior +1
-            set_index(newNode->jogo, get_index(newNode->prev->jogo)+1);   
+            jogo_setIndex(newNode->jogo, jogo_getIndex(newNode->prev->jogo)+1);   
         }
 
         // O proximo é o começo da lista
@@ -105,16 +105,16 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index ) {
             // O anterior é ele mesmo                       
             newNode->prev = newNode;    
             // O index dele é 0
-            set_index(newNode->jogo, 0);
+            jogo_setIndex(newNode->jogo, 0);
         }
         else {
-|
+
             // O fim da lista aponta para o novoNo
             catalogo->end->next = newNode;
             // O anterior do novoNo é fim antigo
             newNode->prev = catalogo->end;         
             // O index dele é igual ao index anterior +1
-            set_index(newNode->jogo, get_index(newNode->prev->jogo)+1);   
+            jogo_setIndex(newNode->jogo, jogo_getIndex(newNode->prev->jogo)+1);   
         }
 
         // O proximo é o começo da lista
@@ -141,7 +141,7 @@ static CATALOGO* catalogo_organize( CATALOGO *catalogo ) {
 
             if( node != NULL && node->next != NULL ) {
 
-                set_index(node->jogo, i); 
+                jogo_setIndex(node->jogo, i); 
 
                 node = node->next;
             }
@@ -165,7 +165,7 @@ bool catalogo_remove( CATALOGO *catalogo, int index ) {
 
         for( int i = 0; i < catalogo->len; i++ ) {
 
-            if( get_index( node->jogo ) == index ) {
+            if( jogo_getIndex( node->jogo ) == index ) {
                 if (node == catalogo->begin)
                 {
                     catalogo->begin = node->next;
@@ -174,7 +174,6 @@ bool catalogo_remove( CATALOGO *catalogo, int index ) {
                 {
                     catalogo->end = node->prev;
                 }   
-
                 node->prev->next = node->next;
                 node->next->prev = node->prev;
 
@@ -263,7 +262,7 @@ CATALOGO* catalogo_importFromFile(char* fileName) {
 
         fscanf(csv, "%[^(\n|\r)]", produtora);      
 
-        catalogo_push( catalogo, set_jogo( nome, ano, produtora ) );
+        catalogo_push( catalogo, jogo_create( nome, ano, produtora ) );
 
         fscanf(csv, "%c", &junk); // Captura o proximo caractere do arquivo
 
@@ -287,9 +286,9 @@ CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo){
     {
         for (size_t i = 0; i < (catalogo->len-counter); i++)
         {
-            if (strcmp(get_nome(node->jogo), get_nome(node_auxiliar->next->jogo)) == 0)
+            if (strcmp(jogo_getNome(node->jogo), jogo_getNome(node_auxiliar->next->jogo)) == 0)
             {
-                catalogo_remove(catalogo, get_index(node_auxiliar->next->jogo));
+                catalogo_remove(catalogo, jogo_getIndex(node_auxiliar->next->jogo));
             }
             else
             {
@@ -304,55 +303,81 @@ CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo){
     return catalogo;     
 }
 
-void catalogo_search_empresa(char *lista, CATALOGO *catalogo) {
-    char *empresa;
-    int count = 0;
-    empresa = readLine();
-    NODE *node = catalogo->begin;
-    for (size_t i = 0; i < (catalogo->len); i++){
-        if (strcmp(get_produtora(node->jogo), empresa) == 0)
-        {
-            strcat(strcat(lista, get_nome(node->jogo)),"\n");
-            count++;
-        }
-        node = node->next;
+void catalogo_srcProdutora(CATALOGO *catalogo, char *produtora) {
+
+    NODE *node;
+    bool notFound = true; 
+
+    if( catalogo->begin == NULL ) { // Catalogo vazio!
+        printf( "Nada encontrado\n" );
+        return;
+    }        
+    else {
+        node = catalogo->begin;
     }
-        if (count == 0)
-        {
-            strcat(strcat(lista, "Nada encontrado"),"\n");
+
+    do {        
+        if( strcmp( jogo_getProdutora(node->jogo), produtora) == 0 ) {
+
+            printf( "%s\n", jogo_getNome(node->jogo) );
+            notFound = false;
         }
+
+        if ( node->next != NULL)
+            node = node->next;
+
+    } while (node != catalogo->begin); 
+
+    if( notFound ) {
+
+        printf( "Nada encontrado\n" );        
+    }
+
+    return;
 }
 
-void catalogo_search_ano(char *lista, CATALOGO *catalogo) {
-    char *ano;
-    int count = 0;
-    ano = readLine();
-    NODE *node = catalogo->begin;
-        for (size_t j = 0; j < (catalogo->len); j++){
-            if (strcmp(get_ano(node->jogo), ano) == 0)
-            {
-                strcat(strcat(lista, get_nome(node->jogo)),"\n");
-                count++;
-            }
+void catalogo_srcAno(CATALOGO *catalogo, char *ano) {
+    NODE *node;
+    bool notFound = true; 
+
+    if( catalogo->begin == NULL ) { // Catalogo vazio!
+        printf( "Nada encontrado\n" );
+        return;
+    }        
+    else {
+        node = catalogo->begin;
+    }
+
+    do {        
+        if( strcmp( jogo_getAno(node->jogo), ano) == 0 ) {
+
+            printf( "%s\n", jogo_getNome(node->jogo) );
+            notFound = false;
+        }
+
+        if ( node->next != NULL)
             node = node->next;
-        }
-        if (count == 0)
-        {
-            strcat(strcat(lista, "Nada encontrado"),"\n");
-        }
+
+    } while (node != catalogo->begin); 
+
+    if( notFound ) {
+
+        printf( "Nada encontrado\n" );        
+    }
+
+    return;
 }
 
 void catalogo_print(CATALOGO* catalogo) {
     NODE* node = catalogo->begin;
     do
     {
-        printf("Nome: %s Produtora: %s Ano: %s Index: %d\n", 
-            get_nome(node->jogo), get_ano(node->jogo), get_produtora(node->jogo), get_index(node->jogo));
+        printf( "%d %s\n", jogo_getIndex(node->jogo), jogo_getNome(node->jogo) );
         node = node->next;
     } while (node != catalogo->begin);  
 }
 
-JOGO* catalogo_search_index(CATALOGO *catalogo, int index) {
+JOGO* catalogo_srcIndex(CATALOGO *catalogo, int index) {
     NODE *node = catalogo->begin;
     for (size_t j = 0; j < index; j++){
         node = node->next;

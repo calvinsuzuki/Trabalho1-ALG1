@@ -19,7 +19,7 @@ struct jogo_t
     int index;
 };
 
-JOGO* set_jogo(char* nome, char* produtora, char* ano){
+JOGO* jogo_create(char* nome, char* ano, char* produtora) {
     //Aloca Memória
     JOGO *joguinho = (JOGO*) malloc( sizeof(JOGO) );
     
@@ -48,20 +48,20 @@ JOGO* set_jogo(char* nome, char* produtora, char* ano){
     return joguinho;
 }
 
-char *get_ano(JOGO *joguinho){
+char *jogo_getAno(JOGO *joguinho){
     return joguinho->ano;
 }
-char *get_produtora(JOGO* joguinho){
+char *jogo_getProdutora(JOGO* joguinho){
     return joguinho->produtora;
 }
-char *get_nome(JOGO* joguinho){
+char *jogo_getNome(JOGO* joguinho){
     return joguinho->nome;
 }
-int get_index(JOGO* joguinho){
+int jogo_getIndex(JOGO* joguinho){
     return joguinho->index;
 }
 
-void set_index(JOGO* joguinho, int index){
+void jogo_setIndex(JOGO* joguinho, int index){
     joguinho->index = index;
 }
 

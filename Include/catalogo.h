@@ -23,10 +23,10 @@ bool catalogo_apagar( CATALOGO **catalogo );
 bool catalogo_remove( CATALOGO *catalogo, int index );
 CATALOGO* catalogo_importFromFile(char* fileName);
 CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo); 
-void catalogo_search_empresa(char *lista, CATALOGO *catalogo);
-void catalogo_search_ano(char *lista, CATALOGO *catalogo);
-void catalogo_print(CATALOGO* catalogo);
-JOGO* catalogo_search_index(CATALOGO *catalogo, int index);
+void catalogo_srcProdutora (CATALOGO *catalogo, char *produtora);
+void catalogo_srcAno(CATALOGO *catalogo, char *ano);
+void catalogo_print (CATALOGO* catalogo);
+JOGO* catalogo_srcIndex (CATALOGO *catalogo, int index);
 
 
 #endif //CATALOGO_H
