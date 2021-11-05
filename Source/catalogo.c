@@ -59,7 +59,7 @@ bool catalogo_push( CATALOGO *catalogo, JOGO *jogo ) {
             // O anterior é ele mesmo                       
             newNode->prev = newNode;    
             // O index dele é 0
-            jogo_setIndex(newNode->jogo, 0);
+            jogo_set_index(newNode->jogo, 0);
         }
         else {
 
@@ -68,7 +68,7 @@ bool catalogo_push( CATALOGO *catalogo, JOGO *jogo ) {
             // O anterior do novoNo é fim antigo
             newNode->prev = catalogo->end;         
             // O index dele é igual ao index anterior +1
-            jogo_setIndex(newNode->jogo, jogo_getIndex(newNode->prev->jogo)+1);   
+            jogo_set_index(newNode->jogo, jogo_get_index(newNode->prev->jogo)+1);   
         }
 
         // O proximo é o começo da lista
@@ -105,7 +105,7 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index ) {
             // O anterior é ele mesmo                       
             newNode->prev = newNode;    
             // O index dele é 0
-            jogo_setIndex(newNode->jogo, 0);
+            jogo_set_index(newNode->jogo, 0);
         }
         else {
 
@@ -114,7 +114,7 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index ) {
             // O anterior do novoNo é fim antigo
             newNode->prev = catalogo->end;         
             // O index dele é igual ao index anterior +1
-            jogo_setIndex(newNode->jogo, jogo_getIndex(newNode->prev->jogo)+1);   
+            jogo_set_index(newNode->jogo, jogo_get_index(newNode->prev->jogo)+1);   
         }
 
         // O proximo é o começo da lista
@@ -141,7 +141,7 @@ static CATALOGO* catalogo_organize( CATALOGO *catalogo ) {
 
             if( node != NULL && node->next != NULL ) {
 
-                jogo_setIndex(node->jogo, i); 
+                jogo_set_index(node->jogo, i); 
 
                 node = node->next;
             }
@@ -165,7 +165,7 @@ bool catalogo_remove( CATALOGO *catalogo, int index ) {
 
         for( int i = 0; i < catalogo->len; i++ ) {
 
-            if( jogo_getIndex( node->jogo ) == index ) {
+            if( jogo_get_index( node->jogo ) == index ) {
                 if (node == catalogo->begin)
                 {
                     catalogo->begin = node->next;
@@ -229,7 +229,7 @@ static void node_destroy( NODE *node, NODE *nodeEnd ) {
     }
 }
 
-CATALOGO* catalogo_importFromFile(char* fileName) {
+CATALOGO* catalogo_import_from_file(char* fileName) {
 
     FILE *csv;
     CATALOGO *catalogo = catalogo_create();
@@ -286,9 +286,9 @@ CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo){
     {
         for (size_t i = 0; i < (catalogo->len-counter); i++)
         {
-            if (strcmp(jogo_getNome(node->jogo), jogo_getNome(node_auxiliar->next->jogo)) == 0)
+            if (strcmp(jogo_get_nome(node->jogo), jogo_get_nome(node_auxiliar->next->jogo)) == 0)
             {
-                catalogo_remove(catalogo, jogo_getIndex(node_auxiliar->next->jogo));
+                catalogo_remove(catalogo, jogo_get_index(node_auxiliar->next->jogo));
             }
             else
             {
@@ -303,7 +303,7 @@ CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo){
     return catalogo;     
 }
 
-void catalogo_srcProdutora(CATALOGO *catalogo, char *produtora) {
+void catalogo_src_produtora(CATALOGO *catalogo, char *produtora) {
 
     NODE *node;
     bool notFound = true; 
@@ -317,9 +317,9 @@ void catalogo_srcProdutora(CATALOGO *catalogo, char *produtora) {
     }
 
     do {        
-        if( strcmp( jogo_getProdutora(node->jogo), produtora) == 0 ) {
+        if( strcmp( jogo_get_produtora(node->jogo), produtora) == 0 ) {
 
-            printf( "%s\n", jogo_getNome(node->jogo) );
+            printf( "%s\n", jogo_get_nome(node->jogo) );
             notFound = false;
         }
 
@@ -336,7 +336,7 @@ void catalogo_srcProdutora(CATALOGO *catalogo, char *produtora) {
     return;
 }
 
-void catalogo_srcAno(CATALOGO *catalogo, char *ano) {
+void catalogo_src_ano(CATALOGO *catalogo, char *ano) {
     NODE *node;
     bool notFound = true; 
 
@@ -349,9 +349,9 @@ void catalogo_srcAno(CATALOGO *catalogo, char *ano) {
     }
 
     do {        
-        if( strcmp( jogo_getAno(node->jogo), ano) == 0 ) {
+        if( strcmp( jogo_get_ano(node->jogo), ano) == 0 ) {
 
-            printf( "%s\n", jogo_getNome(node->jogo) );
+            printf( "%s\n", jogo_get_nome(node->jogo) );
             notFound = false;
         }
 
@@ -372,12 +372,12 @@ void catalogo_print(CATALOGO* catalogo) {
     NODE* node = catalogo->begin;
     do
     {
-        printf( "%s\n", jogo_getNome(node->jogo) );
+        printf( "%s\n", jogo_get_nome(node->jogo) );
         node = node->next;
     } while (node != catalogo->begin);  
 }
 
-JOGO* catalogo_srcIndex(CATALOGO *catalogo, int index) {
+JOGO* catalogo_src_index(CATALOGO *catalogo, int index) {
     NODE *node = catalogo->begin;
     for (size_t j = 0; j < index; j++){
         node = node->next;

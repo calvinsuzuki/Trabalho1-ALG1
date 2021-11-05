@@ -48,20 +48,20 @@ JOGO* jogo_create(char* nome, char* ano, char* produtora) {
     return joguinho;
 }
 
-char *jogo_getAno(JOGO *joguinho){
+char *jogo_get_ano(JOGO *joguinho){
     return joguinho->ano;
 }
-char *jogo_getProdutora(JOGO* joguinho){
+char *jogo_get_produtora(JOGO* joguinho){
     return joguinho->produtora;
 }
-char *jogo_getNome(JOGO* joguinho){
+char *jogo_get_nome(JOGO* joguinho){
     return joguinho->nome;
 }
-int jogo_getIndex(JOGO* joguinho){
+int jogo_get_index(JOGO* joguinho){
     return joguinho->index;
 }
 
-void jogo_setIndex(JOGO* joguinho, int index){
+void jogo_set_index(JOGO* joguinho, int index){
     joguinho->index = index;
 }
 
