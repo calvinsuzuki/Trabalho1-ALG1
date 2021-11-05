@@ -19,15 +19,13 @@ static void catalogo_organize( CATALOGO *catalogo );
 static NODE* node_search_and_copy( NODE* begin, int depth );
 static NODE* node_search( NODE* begin, int depth );
 
-struct node_st
-{
+struct node_st {
     JOGO *jogo;
     NODE *next;
     NODE *prev;
 };
 
-struct catalogo_t 
-{
+struct catalogo_t {
     NODE *begin;
     NODE *end;
     int len;
@@ -44,236 +42,6 @@ CATALOGO *catalogo_create() {
     }
 
     return catalogo;
-}
-
-bool catalogo_push( CATALOGO *catalogo, JOGO *jogo ) {
-
-    if ( catalogo != NULL ) {
-
-        NODE *newNode = (NODE *) malloc( sizeof(NODE) );
-        newNode->jogo = jogo;
-
-        // Caso lista vazia
-        if ( catalogo->begin == NULL && catalogo->end == NULL ) {
-
-            // O começo da lista é o novoNó
-            catalogo->begin = newNode;
-            // O anterior é ele mesmo                       
-            newNode->prev = newNode;    
-            // O index dele é 0
-            jogo_set_index(newNode->jogo, 0);
-        }
-        else {
-
-            // O fim da lista aponta para o novoNo
-            catalogo->end->next = newNode;
-            // O anterior do novoNo é fim antigo
-            newNode->prev = catalogo->end;         
-            // O index dele é igual ao index anterior +1
-            jogo_set_index(newNode->jogo, jogo_get_index(newNode->prev->jogo)+1);   
-        }
-
-        // O proximo é o começo da lista
-        newNode->next = catalogo->begin;
-        // O fim da lista é o novoNó
-        catalogo->end = newNode;
-        // Incrementa o tamanho da lista
-        catalogo->len++;
-
-        return true;
-
-    }
-
-    return false;
-}
-
-bool catalogo_move_jogo( CATALOGO *catalogo, int index, int movement ) {
-
-    if ( catalogo != NULL ) {
-
-        if ( index < 0 || index >= catalogo->len) {
-        // Esse jogo nao existe!
-            return false;
-        }
-        // printf( "\nAntes\n" );
-        // catalogo_print( catalogo );
-
-        if (movement < 0) { // 
-            movement %= catalogo->len;
-            movement += (catalogo->len - 1) ;
-        }
-        if (movement > 0) {
-            movement %= catalogo->len;
-        }
-        if (movement == 0) { // Não precisa mover
-            return true;
-        }
-
-        NODE *nodeToMove = node_search_and_copy( catalogo->begin, index );
-        NODE *node = node_search( catalogo->begin, index+movement );
-
-        catalogo_remove( catalogo, index );
-
-        // printf("\n\nNode para ser movido: %s\n", jogo_get_nome(nodeToMove->jogo) );
-        // printf("Node anterior: %s\n", jogo_get_nome(node->jogo) );
-        // printf("Node posterior: %s\n\n", jogo_get_nome(node->next->jogo) );
-
-        nodeToMove->prev = node;
-        nodeToMove->next = node->next;
-
-        // printf( "\nRemove nodeToMove (len--)\n" );
-        // catalogo_print( catalogo );
-
-        node->next->prev = nodeToMove;
-        node->next = nodeToMove;  
-        catalogo->len++;
-
-        // printf( "\nInsere o node no lugar certo (len++)\n" );
-        // catalogo_print( catalogo );        
-
-        // printf( "\norganize \n" );
-
-        catalogo_organize( catalogo );
-
-        //catalogo_print( catalogo );
-
-        return true;
-
-    }
-
-    return false;
-}
-
-static NODE* node_search_and_copy( NODE* begin, int depth ) {
-
-    if ( begin != NULL ) {    
-
-        NODE *newNode = (NODE *) malloc( sizeof(NODE) );
-        NODE *node = begin;
-
-        for( int i = 0; i < depth; i++ ) {
-            if( node->next != NULL)
-                node = node->next;
-        }
-        newNode->jogo = jogo_copy( node->jogo );
-        newNode->next = node->next;
-        newNode->prev = node->prev;
-
-        return newNode;
-    }
-
-    return NULL;
-}
-
-static NODE* node_search( NODE* begin, int depth ) {
-
-    if ( begin != NULL ) {    
-
-        NODE *node = begin;
-
-        for( int i = 0; i < depth; i++ ) {
-            if( node->next != NULL)
-                node = node->next;
-        }
-
-        return node;
-    }
-
-    return NULL;
-}
-
-static void catalogo_organize( CATALOGO *catalogo ) {
-
-    NODE *node = catalogo->begin;
-
-    if( catalogo != NULL ) {
-
-        for( int i = 0; i < catalogo->len; i++ ) {
-
-            if( node != NULL && node->next != NULL ) {
-
-                jogo_set_index(node->jogo, i); 
-
-                node = node->next;
-            }
-        }
-    }
-}
-
-bool catalogo_remove( CATALOGO *catalogo, int index ) {
-
-    if ( catalogo != NULL ) {
-
-        if ( catalogo->len == 0 ) { // Caso o catalogo esteja vazio
-            return false;
-        }
-
-        NODE *node = catalogo->begin;
-
-        for( int i = 0; i < catalogo->len; i++ ) {
-
-            if( jogo_get_index( node->jogo ) == index ) {
-                if (node == catalogo->begin)
-                {
-                    catalogo->begin = node->next;
-                }
-                if (node == catalogo->end)
-                {
-                    catalogo->end = node->prev;
-                }   
-                node->prev->next = node->next;
-                node->next->prev = node->prev;
-
-                jogo_apagar( &node->jogo );
-                node->prev = NULL;
-                node->next = NULL;
-                free( node );
-                node = NULL;
-                catalogo->len--;
-
-                catalogo_organize(catalogo);
-
-                return true;
-
-            }
-            else {
-
-                node = node->next;
-            }
-        }
-    }
-
-    return false;
-}
-
-bool catalogo_apagar( CATALOGO **catalogo ) {
-
-    if (*catalogo != NULL)
-    {   
-        node_destroy( (*catalogo)->begin, (*catalogo)->end );
-        //printf("\nnodes destroyed!!\n\n");
-        free( *catalogo );
-        *catalogo = NULL;
-        return true;
-    }
-
-    return false;
-}
-
-static void node_destroy( NODE *node, NODE *nodeEnd ) {
-
-    if( node != NULL ) {
-
-        // printf("DELETE GAME %d: %s\n", get_index(node->jogo), get_nome(node->jogo));
-        if( node->next != NULL && node != nodeEnd) 
-            node_destroy( node->next, nodeEnd );
-
-        jogo_apagar( &node->jogo );
-        node->prev = NULL;
-        node->next = NULL;
-        free( node );
-        node = NULL;
-    }
 }
 
 CATALOGO* catalogo_import_from_file(char* fileName) {
@@ -327,6 +95,152 @@ CATALOGO* catalogo_import_from_file(char* fileName) {
 
     return catalogo;
 }
+
+bool catalogo_push( CATALOGO *catalogo, JOGO *jogo ) {
+
+    if ( catalogo != NULL ) {
+
+        NODE *newNode = (NODE *) malloc( sizeof(NODE) );
+        newNode->jogo = jogo;
+
+        // Caso lista vazia
+        if ( catalogo->begin == NULL && catalogo->end == NULL ) {
+
+            // O começo da lista é o novoNó
+            catalogo->begin = newNode;
+            // O anterior é ele mesmo                       
+            newNode->prev = newNode;    
+            // O index dele é 0
+            jogo_set_index(newNode->jogo, 0);
+        }
+        else {
+
+            // O fim da lista aponta para o novoNo
+            catalogo->end->next = newNode;
+            // O anterior do novoNo é fim antigo
+            newNode->prev = catalogo->end;         
+            // O index dele é igual ao index anterior +1
+            jogo_set_index(newNode->jogo, jogo_get_index(newNode->prev->jogo)+1);   
+        }
+
+        // O proximo é o começo da lista
+        newNode->next = catalogo->begin;
+        // O fim da lista é o novoNó
+        catalogo->end = newNode;
+        // Incrementa o tamanho da lista
+        catalogo->len++;
+
+        return true;
+
+    }
+
+    return false;
+}
+
+bool catalogo_move_jogo( CATALOGO *catalogo, int index, int movement ) {
+
+    if ( catalogo != NULL ) {
+
+        if ( index < 0 || index >= catalogo->len) {
+        // Jogo nao existe!
+            return false;
+        }
+        if (movement < 0) {
+            //Usa modulo para evitar loop
+            movement %= catalogo->len;
+            // Soma catalogo->len e (-1) para dar uma volta e aparecer no lugar a esquerda
+            movement += (catalogo->len - 1);
+        }
+        if (movement > 0) {
+            // Usa modulo para evitar loop
+            movement %= catalogo->len;
+        }
+        if (movement == 0) {
+            // Não precisa mover
+            return true; 
+        }
+
+        NODE *nodeToMove = node_search_and_copy( catalogo->begin, index );
+        NODE *node = node_search( catalogo->begin, index+movement );
+
+        catalogo_remove( catalogo, index );
+
+        nodeToMove->prev = node;
+        nodeToMove->next = node->next;
+
+        node->next->prev = nodeToMove;
+        node->next = nodeToMove;  
+        catalogo->len++;
+
+        catalogo_organize( catalogo );
+
+        return true;
+
+    }
+
+    return false;
+}
+
+bool catalogo_remove( CATALOGO *catalogo, int index ) {
+
+    if ( catalogo != NULL ) {
+
+        if ( catalogo->len == 0 ) { // Caso o catalogo esteja vazio
+            return false;
+        }
+
+        NODE *node = catalogo->begin;
+
+        for( int i = 0; i < catalogo->len; i++ ) {
+
+            if( jogo_get_index( node->jogo ) == index ) {
+                if (node == catalogo->begin)
+                {
+                    catalogo->begin = node->next;
+                }
+                if (node == catalogo->end)
+                {
+                    catalogo->end = node->prev;
+                }   
+                node->prev->next = node->next;
+                node->next->prev = node->prev;
+
+                jogo_apagar( &node->jogo );
+                node->prev = NULL;
+                node->next = NULL;
+                free( node );
+                node = NULL;
+                catalogo->len--;
+
+                catalogo_organize(catalogo);
+
+                return true;
+
+            }
+            else {
+
+                node = node->next;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool catalogo_apagar( CATALOGO **catalogo ) {
+
+    if (*catalogo != NULL)
+    {   
+        node_destroy( (*catalogo)->begin, (*catalogo)->end );
+        free( *catalogo );
+        *catalogo = NULL;
+        return true;
+    }
+
+    return false;
+}
+
+
 
 void catalogo_remove_duplicates(CATALOGO* catalogo){
     int counter = 1, index_aux = 1;
@@ -432,4 +346,81 @@ JOGO* catalogo_src_index(CATALOGO *catalogo, int index) {
         node = node->next;
     }
     return node->jogo;
+}
+
+// Retorna uma copia do ponteiro do Node
+static NODE* node_search_and_copy( NODE* begin, int depth ) {
+
+    if ( begin != NULL ) {    
+
+        // 
+
+        NODE *newNode = (NODE *) malloc( sizeof(NODE) );
+        NODE *node = begin;
+
+        for( int i = 0; i < depth; i++ ) {
+            if( node->next != NULL)
+                node = node->next;
+        }
+        newNode->jogo = jogo_copy( node->jogo );
+        newNode->next = node->next;
+        newNode->prev = node->prev;
+
+        return newNode;
+    }
+
+    return NULL;
+}
+
+// Retorna o ponteiro do Node
+static NODE* node_search( NODE* begin, int depth ) {
+
+    if ( begin != NULL ) {    
+
+        NODE *node = begin;
+
+        for( int i = 0; i < depth; i++ ) {
+            if( node->next != NULL)
+                node = node->next;
+        }
+
+        return node;
+    }
+
+    return NULL;
+}
+
+// Reajusta os index do catalogo
+static void catalogo_organize( CATALOGO *catalogo ) {
+
+    NODE *node = catalogo->begin;
+
+    if( catalogo != NULL ) {
+
+        for( int i = 0; i < catalogo->len; i++ ) {
+
+            if( node != NULL && node->next != NULL ) {
+
+                jogo_set_index(node->jogo, i); 
+
+                node = node->next;
+            }
+        }
+    }
+}
+
+// Apaga os nodes recursivamente
+static void node_destroy( NODE *node, NODE *nodeEnd ) {
+
+    if( node != NULL ) {
+
+        if( node->next != NULL && node != nodeEnd) 
+            node_destroy( node->next, nodeEnd );
+
+        jogo_apagar( &node->jogo );
+        node->prev = NULL;
+        node->next = NULL;
+        free( node );
+        node = NULL;
+    }
 }
