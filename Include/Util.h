@@ -14,7 +14,6 @@
 #include<stdbool.h>
 
 void bool_print(bool boolean);
-int soma_de_chars(char *string);
 
 char *readLine();
 
