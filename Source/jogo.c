@@ -43,9 +43,16 @@ JOGO* jogo_create(char* nome, char* ano, char* produtora) {
     strcpy(joguinho->ano, ano);
     joguinho->index = 0; 
 
-    free( nome ); free( ano ); free( produtora );
+    //free( nome ); free( ano ); free( produtora );
 
     return joguinho;
+}
+
+JOGO* jogo_copy( JOGO *joguinho ) {
+
+    JOGO *newJogo = jogo_create( joguinho->nome, joguinho->ano, joguinho->produtora );
+
+    return newJogo;
 }
 
 char *jogo_get_ano(JOGO *joguinho){

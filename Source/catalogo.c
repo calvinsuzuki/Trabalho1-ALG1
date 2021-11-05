@@ -15,7 +15,9 @@
 typedef struct node_st NODE;
 
 static void node_destroy( NODE *node, NODE *nodeEnd );
-static CATALOGO* catalogo_organize( CATALOGO *catalogo );
+static void catalogo_organize( CATALOGO *catalogo );
+static NODE* node_search_and_copy( NODE* begin, int depth );
+static NODE* node_search( NODE* begin, int depth );
 
 struct node_st
 {
@@ -85,14 +87,55 @@ bool catalogo_push( CATALOGO *catalogo, JOGO *jogo ) {
     return false;
 }
 
-bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index ) {
+bool catalogo_move_jogo( CATALOGO *catalogo, int index, int movement ) {
 
     if ( catalogo != NULL ) {
 
-        if ( catalogo->begin == NULL && catalogo->end == NULL ){
-
-            
+        if ( index < 0 || index >= catalogo->len) {
+        // Esse jogo nao existe!
+            return false;
         }
+        // printf( "\nAntes\n" );
+        // catalogo_print( catalogo );
+
+        if (movement < 0) { // 
+            movement %= catalogo->len;
+            movement += (catalogo->len - 1) ;
+        }
+        if (movement > 0) {
+            movement %= catalogo->len;
+        }
+        if (movement == 0) { // Não precisa mover
+            return true;
+        }
+
+        NODE *nodeToMove = node_search_and_copy( catalogo->begin, index );
+        NODE *node = node_search( catalogo->begin, index+movement );
+
+        catalogo_remove( catalogo, index );
+
+        // printf("\n\nNode para ser movido: %s\n", jogo_get_nome(nodeToMove->jogo) );
+        // printf("Node anterior: %s\n", jogo_get_nome(node->jogo) );
+        // printf("Node posterior: %s\n\n", jogo_get_nome(node->next->jogo) );
+
+        nodeToMove->prev = node;
+        nodeToMove->next = node->next;
+
+        // printf( "\nRemove nodeToMove (len--)\n" );
+        // catalogo_print( catalogo );
+
+        node->next->prev = nodeToMove;
+        node->next = nodeToMove;  
+        catalogo->len++;
+
+        // printf( "\nInsere o node no lugar certo (len++)\n" );
+        // catalogo_print( catalogo );        
+
+        // printf( "\norganize \n" );
+
+        catalogo_organize( catalogo );
+
+        catalogo_print( catalogo );
 
         return true;
 
@@ -101,7 +144,28 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index ) {
     return false;
 }
 
-static NODE* node_getFromDepth( NODE* begin, int depth ) {
+static NODE* node_search_and_copy( NODE* begin, int depth ) {
+
+    if ( begin != NULL ) {    
+
+        NODE *newNode = (NODE *) malloc( sizeof(NODE) );
+        NODE *node = begin;
+
+        for( int i = 0; i < depth; i++ ) {
+            if( node->next != NULL)
+                node = node->next;
+        }
+        newNode->jogo = jogo_copy( node->jogo );
+        newNode->next = node->next;
+        newNode->prev = node->prev;
+
+        return newNode;
+    }
+
+    return NULL;
+}
+
+static NODE* node_search( NODE* begin, int depth ) {
 
     if ( begin != NULL ) {    
 
@@ -118,7 +182,7 @@ static NODE* node_getFromDepth( NODE* begin, int depth ) {
     return NULL;
 }
 
-static CATALOGO* catalogo_organize( CATALOGO *catalogo ) {
+static void catalogo_organize( CATALOGO *catalogo ) {
 
     NODE *node = catalogo->begin;
 
@@ -133,11 +197,7 @@ static CATALOGO* catalogo_organize( CATALOGO *catalogo ) {
                 node = node->next;
             }
         }
-
-        return catalogo;
     }
-
-    return NULL;
 }
 
 bool catalogo_remove( CATALOGO *catalogo, int index ) {
@@ -256,7 +316,9 @@ CATALOGO* catalogo_import_from_file(char* fileName) {
         if (junk == '\r') {
 
             fseek(csv, 1, SEEK_CUR); // Pula o '/n'
-        }        
+        } 
+
+        free( nome ); free( ano ); free( produtora );       
     }
 
     free( nome ); free( ano ); free( produtora );
@@ -358,6 +420,7 @@ void catalogo_print(CATALOGO* catalogo) {
     NODE* node = catalogo->begin;
     do
     {
+        //printf( "%d %s\n", jogo_get_index(node->jogo), jogo_get_nome(node->jogo) );
         printf( "%s\n", jogo_get_nome(node->jogo) );
         node = node->next;
     } while (node != catalogo->begin);  

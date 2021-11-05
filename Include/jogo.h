@@ -14,6 +14,7 @@
 typedef struct jogo_t JOGO;
 
 JOGO* jogo_create(char* nome, char* ano, char* produtora);
+JOGO* jogo_copy( JOGO *joguinho );
 char *jogo_get_produtora(JOGO* joguinho);
 char *jogo_get_ano(JOGO* joguinho);
 char *jogo_get_nome(JOGO* joguinho);

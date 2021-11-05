@@ -16,7 +16,7 @@ typedef struct catalogo_t CATALOGO;
 
 CATALOGO *catalogo_create();
 bool catalogo_push( CATALOGO *catalogo, JOGO *jogo );
-bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index );
+bool catalogo_move_jogo( CATALOGO *catalogo, int index, int movement );
 bool catalogo_apagar( CATALOGO **catalogo );
 
 //Funções no catalogo

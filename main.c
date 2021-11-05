@@ -75,10 +75,19 @@ int main() {
 		}
 		else if (strcmp(option, "mr") == 0) // Move jogo para a direita
 		{
-			int index; 
+			int index, moves; 
 			scanf(" %d", &index);
-			printf( "%s\n", jogo_get_nome( catalogo_src_index(catalogo, index) ) );
- 
+			scanf(" %d", &moves);
+
+			catalogo_move_jogo( catalogo, index, moves );	 
+		}
+		else if (strcmp(option, "ml") == 0) // Move jogo para a esquerda
+		{
+			int index, moves; 
+			scanf(" %d", &index);
+			scanf(" %d", &moves);
+
+			catalogo_move_jogo( catalogo, index, -moves ); 
 		}
 		else if (strcmp(option, "f") != 0)
 		{
