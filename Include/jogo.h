@@ -14,11 +14,11 @@
 typedef struct jogo_t JOGO;
 
 JOGO* jogo_create(char* nome, char* ano, char* produtora);
-char *jogo_getProdutora(JOGO* joguinho);
-char *jogo_getAno(JOGO* joguinho);
-char *jogo_getNome(JOGO* joguinho);
-int jogo_getIndex(JOGO* joguinho);
+char *jogo_get_produtora(JOGO* joguinho);
+char *jogo_get_ano(JOGO* joguinho);
+char *jogo_get_nome(JOGO* joguinho);
+int jogo_get_index(JOGO* joguinho);
 bool jogo_apagar(JOGO **jogo);
-void jogo_setIndex(JOGO* joguinho, int index); 
+void jogo_set_index(JOGO* joguinho, int index); 
 
 #endif //JOGO_H  

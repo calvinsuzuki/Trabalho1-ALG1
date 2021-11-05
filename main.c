@@ -32,7 +32,7 @@
 
 int main() {
 
-	CATALOGO *catalogo = catalogo_importFromFile("CSV.csv");
+	CATALOGO *catalogo = catalogo_import_from_file("CSV.csv");
 
 	char option[100];
 
@@ -42,7 +42,7 @@ int main() {
 
 		if (strcmp(option, "r") == 0) // Remove duplicados
 		{
-			catalogo_remove_duplicates(catalogo);
+			catalogo = catalogo_remove_duplicates(catalogo);
 			//catalogo_print(catalogo);
 
 		}
@@ -50,7 +50,7 @@ int main() {
 		{	
 			char *busca = readLine();
 
-			catalogo_srcProdutora( catalogo, busca);
+			catalogo_src_produtora( catalogo, busca);
 
 			free ( busca );
 		}
@@ -58,7 +58,7 @@ int main() {
 		{
 			char *busca = readLine();
 
-			catalogo_srcAno( catalogo, busca);
+			catalogo_src_ano( catalogo, busca);
 
 			free ( busca );
 		}
@@ -70,10 +70,10 @@ int main() {
 		{
 			int index; 
 			scanf("%d", &index);
-			printf( "%s\n", jogo_getNome( catalogo_srcIndex(catalogo, index) ) );
+			printf( "%s\n", jogo_get_nome( catalogo_src_index(catalogo, index) ) );
+ 
 		}
-		else if (strcmp(option, "f") == 0){	}
-		else
+		else if (strcmp(option, "f") != 0)
 		{
 			printf("Comando Inválido \n");
 		}
