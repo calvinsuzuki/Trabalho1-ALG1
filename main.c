@@ -42,7 +42,7 @@ int main() {
 
 		if (strcmp(option, "r") == 0) // Remove duplicados
 		{
-			catalogo = catalogo_remove_duplicates(catalogo);
+			catalogo_remove_duplicates(catalogo);
 			//catalogo_print(catalogo);
 
 		}
@@ -71,7 +71,6 @@ int main() {
 			int index; 
 			scanf("%d", &index);
 			printf( "%s\n", jogo_getNome( catalogo_srcIndex(catalogo, index) ) );
- 
 		}
 		else if (strcmp(option, "f") == 0){	}
 		else

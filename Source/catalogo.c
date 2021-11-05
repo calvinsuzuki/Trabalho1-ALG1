@@ -89,12 +89,13 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index ) {
 
     if ( catalogo != NULL ) {
 
-        if( index >= catalogo->len ) {
+        if( index > catalogo->len ) {
 
             return false;
         }
 
         NODE *newNode = (NODE *) malloc( sizeof(NODE) );
+        NODE *indexNode;
         newNode->jogo = jogo;
 
         // Caso lista vazia
@@ -108,6 +109,7 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index ) {
             jogo_setIndex(newNode->jogo, 0);
         }
         else {
+
 
             // O fim da lista aponta para o novoNo
             catalogo->end->next = newNode;
@@ -129,6 +131,23 @@ bool catalogo_insert( CATALOGO *catalogo, JOGO *jogo, int index ) {
     }
 
     return false;
+}
+
+static NODE* node_getFromDepth( NODE* begin, int depth ) {
+
+    if ( begin != NULL ) {    
+
+        NODE *node = begin;
+
+        for( int i = 0; i < depth; i++ ) {
+            if( node->next != NULL)
+                node = node->next;
+        }
+
+        return node;
+    }
+
+    return NULL;
 }
 
 static CATALOGO* catalogo_organize( CATALOGO *catalogo ) {
@@ -279,7 +298,7 @@ CATALOGO* catalogo_importFromFile(char* fileName) {
     return catalogo;
 }
 
-CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo){
+void catalogo_remove_duplicates(CATALOGO* catalogo){
     int counter = 1, index_aux = 1;
     NODE* node = catalogo->begin, *node_auxiliar = node;
     while (counter < catalogo->len)
@@ -300,7 +319,6 @@ CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo){
         node = node->next;
         node_auxiliar = node; 
     }
-    return catalogo;     
 }
 
 void catalogo_srcProdutora(CATALOGO *catalogo, char *produtora) {

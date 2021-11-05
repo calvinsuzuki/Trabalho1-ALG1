@@ -22,7 +22,7 @@ bool catalogo_apagar( CATALOGO **catalogo );
 //Funções no catalogo
 bool catalogo_remove( CATALOGO *catalogo, int index );
 CATALOGO* catalogo_importFromFile(char* fileName);
-CATALOGO* catalogo_remove_duplicates(CATALOGO* catalogo); 
+void catalogo_remove_duplicates(CATALOGO* catalogo); 
 void catalogo_srcProdutora (CATALOGO *catalogo, char *produtora);
 void catalogo_srcAno(CATALOGO *catalogo, char *ano);
 void catalogo_print (CATALOGO* catalogo);
