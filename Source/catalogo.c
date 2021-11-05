@@ -135,7 +135,7 @@ bool catalogo_move_jogo( CATALOGO *catalogo, int index, int movement ) {
 
         catalogo_organize( catalogo );
 
-        catalogo_print( catalogo );
+        //catalogo_print( catalogo );
 
         return true;
 
