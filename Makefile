@@ -1,7 +1,7 @@
 UTIL=Source/jogo.c Source/catalogo.c Source/Util.c
 MAIN=main.c
 BINARY=Main
-ZIP=Ex2
+ZIP=T1
 
 all:
 	gcc -Wall -g -I ./ $(UTIL) $(MAIN) -o $(BINARY) -lm

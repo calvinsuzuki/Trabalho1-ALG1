@@ -43,7 +43,7 @@ int main() {
 		if (strcmp(option, "r") == 0) // Remove duplicados
 		{
 			catalogo = catalogo_remove_duplicates(catalogo);
-			catalogo_print(catalogo);
+			//catalogo_print(catalogo);
 
 		}
 		else if (strcmp(option, "p") == 0) // Pesquisa por produtora
@@ -73,10 +73,12 @@ int main() {
 			printf( "%s\n", jogo_getNome( catalogo_srcIndex(catalogo, index) ) );
  
 		}
-		else if (strcmp(option, "f") != 0)
+		else if (strcmp(option, "f") == 0){	}
+		else
 		{
 			printf("Comando Inválido \n");
 		}
+		
 		
 	} while( strcmp(option, "f") != 0 );
 
